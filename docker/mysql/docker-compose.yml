@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+
+  db-bitcoin:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABSE: bitcoin
+    volumes:
+      - /mnt/cafe1c3a-23b4-44b6-9ddc-19046620da1c/desenvolvimento/estudo/Java/quarkus/bitcoins/db:/var/lib/mysql
+    ports:
+      - 8081:3306
+    networks:
+      - mysql-compose-network
+
+networks:
+  mysql-compose-network:
+    driver: bridge

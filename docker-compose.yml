@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+
+  bitcoin-jvm:
+    image: quarkus/bitcoin-jvm
+    build:
+      context: ./
+      dockerfile: src/main/docker/Dockerfile.${QUARKUS_MODE:-jvm}
+    environment:
+      QUARKUS_DB_URL: jdbc:mysql://db-bitcoin:3306/bitcoin_negotiation?autoReconnect=true
+    networks:
+      - bitcoin-net
+    ports:
+      - 8080:8080
+    depends_on:
+      - db-bitcoin
+
+  db-bitcoin:
+    image: aluracursos/mysql-quarkus-db:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABSE: root
+    volumes:
+      - db-bitcoin:/var/lib/mysql
+    ports:
+      - 3307:3306
+    networks:
+      - bitcoin-net
+
+volumes:
+  db-bitcoin:
+
+networks:
+  bitcoin-net:
+    driver: bridge
